@@ -16,7 +16,13 @@
     {% if entry.type == "thesis" %}
       {{reference}}
     {% else %}
-      <div class="title">{{entry.title}}</div>
+  <div class="title">{{entry.title}}{% if entry.opthiddenpdf %}
+      {% if entry.optpdf contains '://' %}
+      <a href="{{ entry.opthiddenpdf }}" target="_blank">.</a>
+      {% else %}
+      <a href="{{ entry.key | prepend: '/assets/pdf/' | relative_url     }}.pdf" target="_blank">.</a>
+    {% endif %}
+      {% endif %}</div>
       <div class="author">
         {% for author in entry.author_array %}
           {% if forloop.length == 1 %}
@@ -66,18 +72,33 @@
     <div class="links">
     {% if entry.abstract %}
       <a class="abstract btn btn-sm z-depth-0" role="button">Abs</a>
-    {% endif %}
+      {% endif %}
+      {% if entry.doi %}
+      <a href="http://dx.doi.org/{{ entry.doi }}" class="btn btn-sm z-depth-0" role="button" target="_blank">doi</a>
+      {% endif %}
     {% if entry.arxiv %}
       <a href="http://arxiv.org/abs/{{ entry.arxiv }}" class="btn btn-sm z-depth-0" role="button" target="_blank">arXiv</a>
+      {% endif %}
+      {% if entry.optarxiv %}
+      <a href="http://arxiv.org/abs/{{ entry.optarxiv }}" class="btn btn-sm z-depth-0" role="button" target="_blank">arXiv</a>
+      {% endif %}
+      {% if entry.url %}
+      <a href="{{ entry.url }}" class="btn btn-sm z-depth-0" role="button" target="_blank">url</a>
     {% endif %}
     {% if entry.html %}
       <a href="{{ entry.html }}" class="btn btn-sm z-depth-0" role="button" target="_blank">HTML</a>
+      {% endif %}
+    {% if entry.optsharedit %}
+      <a href="{{ entry.optsharedit }}" class="btn btn-sm z-depth-0" role="button" target="_blank">view</a>
     {% endif %}
-    {% if entry.pdf %}
-      {% if entry.pdf contains '://' %}
-      <a href="{{ entry.pdf }}" class="btn btn-sm z-depth-0" role="button" target="_blank">PDF</a>
+
+    {% if entry.optpdf %}
+      {% if entry.optpdf contains '://' %}
+      <a href="{{ entry.optpdf }}" class="btn btn-sm z-depth-0" role="button" target="_blank">PDF</a>
       {% else %}
-      <a href="{{ entry.pdf | prepend: '/assets/pdf/' | relative_url }}" class="btn btn-sm z-depth-0" role="button" target="_blank">PDF</a>
+      <a href="{{ entry.key | prepend: '/assets/pdf/' | relative_url     }}.pdf" class="btn btn-sm z-depth-0" role="button" target="_blank">PDF</a>
+    {% endif %}
+{% if entry.pdf contains '://' %}
       {% endif %}
     {% endif %}
     {% if entry.supp %}
